@@ -21,21 +21,6 @@ Before you begin, ensure you have the following installed:
 
 Ensure your AWS credentials are set in the environment variables. These are required for accessing the S3 bucket. You can do this by setting the following variables:
 
-### Linux/macOS
-
-Add these lines to your `~/.bashrc`, `~/.zshrc`, or `~/.bash_profile`:
-
-```bash
-export AWS_ACCESS_KEY_ID='your_access_key_id'
-export AWS_SECRET_ACCESS_KEY='your_secret_access_key'
-```
-
-Then source the file to load the variables:
-
-```bash
-source ~/.bashrc
-```
-
 ### Windows
 
 Set the environment variables from the command prompt:
@@ -43,15 +28,33 @@ Set the environment variables from the command prompt:
 ```cmd
 setx AWS_ACCESS_KEY_ID "your_access_key_id"
 setx AWS_SECRET_ACCESS_KEY "your_secret_access_key"
+setx AWS_DEFAULT_REGION "your_region"
 ```
 
-After running these commands, restart your terminal or command prompt to apply the changes.
+After running these commands, restart your terminal or Command Prompt to apply the changes.
 
-To check that the environment variables were set correctly, you can run:
+To verify that your AWS credentials are set correctly, you can run the following command (if you have AWS CLI installed):
 
 ```cmd
-echo %AWS_ACCESS_KEY_ID%
-echo %AWS_SECRET_ACCESS_KEY%
+aws sts get-caller-identity
+```
+
+This should return your AWS account details if everything is set up correctly.
+
+### Linux/macOS
+
+Add these lines to your `~/.bashrc`, `~/.zshrc`, or `~/.bash_profile`:
+
+```bash
+export AWS_ACCESS_KEY_ID='your_access_key_id'
+export AWS_SECRET_ACCESS_KEY='your_secret_access_key'
+export AWS_DEFAULT_REGION='your_region'
+```
+
+Then source the file to load the variables:
+
+```bash
+source ~/.bashrc
 ```
 
 ## Installation
@@ -151,6 +154,7 @@ s3_cli/
 - **Invalid AWS Credentials**: The tool will alert you if the AWS credentials are missing or invalid.
 - **File Not Found**: If a local file specified for upload is missing, it will report the error.
 - **Invalid Regex**: If an invalid regex pattern is provided, the tool will notify you.
+- **Connection Issues**: The tool will notify you if there are connection issues, such as an incorrect region or network failure.
 
 ## License
 

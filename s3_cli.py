@@ -7,14 +7,10 @@ import logging
 
 logging.basicConfig(level=logging.WARNING)
 
-# Initialize the S3 client using the provided AWS credentials
+# Initialize the S3 client using environment variables (no need to pass credentials explicitly)
 def get_s3_client():
     try:
-        return boto3.client(
-            's3',
-            aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        )
+        return boto3.client('s3')
     except (NoCredentialsError, PartialCredentialsError) as e:
         click.echo(f"Error: Invalid AWS credentials - {str(e)}")
         raise
