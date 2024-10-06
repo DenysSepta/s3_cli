@@ -1,27 +1,25 @@
 
 # S3 CLI Tool
 
-This is a Python command-line interface (CLI) tool for interacting with AWS S3. It allows you to list, upload, filter, and delete files in an S3 bucket, specifically under the `x-wing/` prefix.
+This is a Python command-line interface (CLI) tool for interacting with AWS S3. It allows you to list, upload, filter, and delete files in an S3 bucket. The CLI is flexible with configurable bucket names and prefixes.
 
 ## Features
 
-- **List Files**: List all files in the `x-wing/` prefix of the S3 bucket.
+- **List Files**: List all files in a specific S3 prefix.
 - **Upload File**: Upload a local file to a specified S3 path within the bucket.
-- **List Filtered Files**: List files in the `x-wing/` prefix that match a specified regex pattern.
-- **Delete Filtered Files**: Delete files in the `x-wing/` prefix that match a specified regex pattern.
+- **List Filtered Files**: List files in the S3 bucket that match a specified regex pattern.
+- **Delete Filtered Files**: Delete files in the S3 bucket that match a regex pattern, with optional dry run mode.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
 - Python 3.x
-- AWS credentials (Access Key ID and Secret Access Key)
+- AWS credentials (Access Key ID and Secret Access Key) set as environment variables:
 
-## AWS Credentials Setup
+### Setting AWS Credentials
 
-Ensure your AWS credentials are set in the environment variables. These are required for accessing the S3 bucket. You can do this by setting the following variables:
-
-### Windows
+#### Windows
 
 Set the environment variables from the command prompt:
 
@@ -31,17 +29,7 @@ setx AWS_SECRET_ACCESS_KEY "your_secret_access_key"
 setx AWS_DEFAULT_REGION "your_region"
 ```
 
-After running these commands, restart your terminal or Command Prompt to apply the changes.
-
-To verify that your AWS credentials are set correctly, you can run the following command (if you have AWS CLI installed):
-
-```cmd
-aws sts get-caller-identity
-```
-
-This should return your AWS account details if everything is set up correctly.
-
-### Linux/macOS
+#### Linux/macOS
 
 Add these lines to your `~/.bashrc`, `~/.zshrc`, or `~/.bash_profile`:
 
@@ -74,68 +62,71 @@ You can install the necessary dependencies using `pip` and the provided `require
 pip install -r requirements.txt
 ```
 
-The two required dependencies are:
-
-- `boto3`: Python SDK for AWS
-- `click`: Python package for creating CLI applications
-
 ## Usage
 
 This CLI tool has several commands that you can use for interacting with your S3 bucket.
 
-### List All Files
+### 1. List All Files
 
-Lists all files under the `x-wing/` prefix in the `developer-task` S3 bucket.
-
-```bash
-python s3_cli.py list-files
-```
-
-### Upload a File
-
-Uploads a local file to the `x-wing/` prefix in the S3 bucket.
+This command lists all files in the specified S3 bucket under a specific prefix:
 
 ```bash
-python s3_cli.py upload-file <local_file_path> <s3_key>
+python s3_cli.py list-files --bucket your-bucket-name --prefix your-prefix
 ```
 
-**Example:**
+Example:
 
 ```bash
-python s3_cli.py upload-file ./test.txt x-wing/test.txt
+python s3_cli.py list-files --bucket developer-task --prefix x-wing/
 ```
 
-### List Files with Regex Filter
+### 2. Upload a File
 
-Lists files in the `x-wing/` prefix that match a regex pattern.
+Uploads a local file to the specified S3 path within the bucket:
 
 ```bash
-python s3_cli.py list-filtered-files <regex_pattern>
+python s3_cli.py upload-file <local_file_path> <s3_key> --bucket your-bucket-name
 ```
 
-**Example:**
+Example:
 
 ```bash
-python s3_cli.py list-filtered-files ".*\.txt"
+python s3_cli.py upload-file ./test.txt x-wing/test.txt --bucket developer-task
 ```
 
-This will list all files in the `x-wing/` prefix that end with `.txt`.
+### 3. List Files Matching a Regex Pattern
 
-### Delete Files with Regex Filter
-
-Deletes files in the `x-wing/` prefix that match a regex pattern.
+Lists files in the specified bucket and prefix that match a regex pattern:
 
 ```bash
-python s3_cli.py delete-filtered-files <regex_pattern>
+python s3_cli.py list-filtered-files "<regex_pattern>" --bucket your-bucket-name --prefix your-prefix
 ```
 
-**Example:**
+Example (list all `.txt` files):
 
 ```bash
-python s3_cli.py delete-filtered-files ".*\.log"
+python s3_cli.py list-filtered-files ".*\.txt" --bucket developer-task --prefix x-wing/
 ```
 
-This will delete all files in the `x-wing/` prefix that end with `.log`.
+### 4. Delete Files Matching a Regex Pattern
+
+Delete files in the specified bucket and prefix that match a regex pattern. Use the `--dry-run` flag to simulate the deletion without actually deleting files:
+
+```bash
+python s3_cli.py delete-filtered-files "<regex_pattern>" --bucket your-bucket-name --prefix your-prefix --dry-run
+```
+
+To actually delete files (without dry run):
+
+```bash
+python s3_cli.py delete-filtered-files "<regex_pattern>" --bucket your-bucket-name --prefix your-prefix
+```
+
+Example (delete all `.txt` files in `x-wing/`):
+
+```bash
+python s3_cli.py delete-filtered-files ".*\.txt" --bucket developer-task --prefix x-wing/
+```
 
 ## Project Structure
 
