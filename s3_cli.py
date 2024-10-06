@@ -5,7 +5,7 @@ import os
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError, EndpointConnectionError
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 
 # Initialize the S3 client using the provided AWS credentials
 def get_s3_client():
